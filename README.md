@@ -1,1 +1,592 @@
-# codex-workflow-for-economists
+# Codex Stata for Economists
+
+**面向经管实证研究的 Codex 可复现工作流**
+
+**最后更新：** 2026-06-04
+
+---
+
+## 定位
+
+本仓库是一个**公开 workflow 仓库**，保存可复用的研究流程、Stata 流水线、Codex 配置、agents、skills、模板和质量管理规则。
+
+真实个人研究项目应放在**独立的私有工作区**中，并可以作为 private GitHub 仓库保存。
+
+重要的规则只有两条：
+
+- 公开仓库只放 workflow，真实研究内容放私有项目仓库。
+- 没有日志或输出表格支撑，就不报告任何数值结论。
+
+---
+
+## 为什么这样设计
+
+经济学实证研究很容易在几个地方失控：研究问题太宽、数据和代码散落、回归规格没有记录、结果解释脱离识别设计、论文中的数字无法追溯。
+
+本仓库的核心思想：
+
+| 原则                 | 说明                                                         |
+| -------------------- | ------------------------------------------------------------ |
+| **问题先行**   | 先判断研究问题是否重要、具体、可证伪、可 pilot               |
+| **私有隔离**   | 每个真实研究项目有独立的私有工作区和 private GitHub 仓库     |
+| **流水线复现** | Stata do-file、日志、表格、图形和报告使用固定目录结构        |
+| **日志验证**   | 所有系数、标准误、样本量、描述统计都必须能回到 log 或 table  |
+| **论文衔接**   | 结果解释、理论诊断、paper QA 和 R&R 回复都接在同一套证据链上 |
+
+---
+
+## 公开仓库与私有研究工作区
+
+推荐结构：**一个公开 workflow 仓库 + 每个研究一个私有 GitHub 仓库**。
+
+```
+./
+├── workflow-for-economists/          ← 公开 workflow 仓库
+│   ├── AGENTS.md                        ← Codex 主规则
+│   ├── skills/                          ← 可复用技能包
+│   ├── agents/                          ← 专用 Agent 配置
+│   ├── templates/                       ← do-file、memo、私有项目骨架等模板
+│   ├── scripts/                         ← 运行脚本、质量检查、私有项目创建
+│   ├── dofiles/                         ← 公开模板流水线
+│   ├── quality_reports/                 ← 质量报告模板
+│   ├── reports/                         ← Quarto 报告模板
+│   └── results_memos/                   ← 结果解释 memo 模板
+│
+└── private-research/                    ← 私有研究工作区（示例）
+    ├── AGENTS.project.md                ← 本项目专用规则
+    ├── data/                            ← 原始数据与中间数据
+    ├── dofiles/                         ← 项目 do-file
+    ├── logs/                            ← Stata 日志
+    ├── output/                          ← 输出表格与图形
+    ├── reports/                         ← 论文草稿与 Quarto 报告
+    ├── quality_reports/                 ← 问题卡、规格说明、决策记录
+    └── results_memos/                   ← 结果解释 memo
+```
+
+真实研究项目按 **年月 + 关键词** 命名：
+
+```
+202606数字化转型与企业创新
+202608平台治理与劳动者福利
+202612最低工资与就业结构
+```
+
+### 公开 workflow 仓库保存
+
+- 通用 Stata 流水线（`dofiles/`）
+- Agent 和 Skill 定义（`agents/`、`skills/`）
+- 可复用模板（`templates/`）
+- 质量规则和检查脚本（`scripts/`）
+- 不含敏感信息的工作流文档
+
+### 私有研究工作区保存
+
+- 原始数据和中间数据（`data/`）
+- 项目 do-file（`dofiles/`）
+- Stata 日志（`logs/`）
+- 输出表格和图形（`output/`）
+- Good Question Card（`quality_reports/good_questions/`）
+- Requirements Spec（`quality_reports/specs/`）
+- 结果解释 memo（`results_memos/`）
+- 论文草稿和审稿回复（`reports/`）
+
+> **注意：** 如果数据协议、伦理审查或机构规则禁止把数据放到 GitHub，即使 private repo 也不要提交数据。此时应使用加密磁盘、机构服务器、Git LFS、DVC 或其他合规存储，并在 `data/README.md` 中记录再现路径。
+
+---
+
+## 快速开始
+
+### 第一步：获取 workflow 仓库
+
+```bash
+git clone https://github.com/YOUR_USERNAME/workflow-for-economists.git
+cd workflow-for-economists
+```
+
+### 第二步：创建私有研究工作区
+
+在 workflow 仓库根目录运行：
+
+```powershell
+# 创建项目目录
+powershell -ExecutionPolicy Bypass -File scripts/new_private_study.ps1 -Keyword "数字化转型与企业创新"
+
+# 同时初始化 Git
+powershell -ExecutionPolicy Bypass -File scripts/new_private_study.ps1 -Keyword "数字化转型与企业创新" -InitGit
+```
+
+这会创建：
+
+```
+D:\Desktop\科研相关\202606数字化转型与企业创新/
+```
+
+### 第三步：在私有工作区启动 Codex
+
+```powershell
+cd "D:\Desktop\科研相关\202606数字化转型与企业创新"
+codex
+```
+
+第一条 prompt 示例：
+
+```text
+请把当前目录当成一个私有经济学实证研究项目。
+公开 workflow 仓库在：
+D:\Desktop\科研相关\workflow-for-economists
+
+请先阅读本项目的 AGENTS.project.md，以及 workflow 仓库中的 AGENTS.md。
+我的研究方向是：数字化转型与企业创新。
+我目前还不确定具体问题。
+
+请先用 good-question workflow 帮我生成 2-3 张 Good Question Card，
+比较每个问题的重要性、可行性、竞争性解释、可证伪性和两周 pilot。
+不要开始写 Stata 代码，先帮我判断哪个问题值得推进。
+```
+
+---
+
+## 完整研究流程
+
+整个流程把一个经济学实证研究从"模糊想法"推进到"可复现、可审计、可写成论文"：
+
+```
+Good Question → 私有研究工作区 → Requirements Spec → 数据审计
+    → Stata 清洗与分析 → 日志验证 → 结果解释与理论诊断
+    → 论文写作 / QA / 审稿回复
+```
+
+---
+
+### 阶段一：打磨研究问题
+
+**适用场景：** 你只有一个方向、文献 gap、proposal 摘要，或者几个想法都看起来能做。
+
+**产物位置：** `quality_reports/good_questions/`
+
+**基本用法：**
+
+```text
+请使用 good-question workflow。
+我的粗略想法是：[写下你的想法]
+
+请生成 Good Question Card，并重点检查：
+1. 这个问题为什么值得做
+2. 它挑战了什么默认假设
+3. 至少两个竞争性解释是什么
+4. 什么证据可以区分这些解释
+5. 什么结果会推翻或削弱它
+6. 两周内可做的 pilot 是什么
+7. 是否值得进入 Stata 实证阶段
+```
+
+**文献 gap 场景：**
+
+```text
+请用 good-question 帮我检查这个文献 gap 是否真的值得做：
+[gap 描述]
+
+请不要直接接受我的 gap。
+请区分：已有证据、合理推断、未知部分。
+如果需要 source audit，请先列出需要核查的文献和 claim。
+```
+
+**Proposal 压力测试：**
+
+```text
+请用 good-question 作为严格评审，压力测试这个 proposal 摘要：
+[proposal 摘要]
+
+请输出：
+1. 最可能被 desk reject 的原因
+2. 最强评审质疑
+3. 哪些地方需要理论重写
+4. 哪些地方需要数据或识别策略补强
+5. 修补后的核心研究问题
+```
+
+---
+
+### 阶段二：确定任务边界
+
+**适用场景：** 任务范围不清楚时，先写 requirements spec，再写代码。
+
+**产物位置：** `quality_reports/specs/`
+
+```text
+请先不要写代码。
+请根据我的研究问题和数据情况，在 quality_reports/specs/ 下生成一个 requirements spec。
+
+要求区分：
+MUST：本轮必须完成
+SHOULD：最好完成
+MAY：有时间再做
+BLOCKED：必须向我确认的问题
+```
+
+---
+
+### 阶段三：数据审计与变量梳理
+
+**适用场景：** 有数据但不知道变量质量、样本结构、缺失情况和可行规格。
+
+```text
+数据已经放在 data/raw/。
+请先做数据审计，不要立刻回归。
+
+请完成：
+1. 识别数据格式和变量列表
+2. 检查样本量、时间范围、面板结构或截面结构
+3. 检查核心变量缺失和异常值
+4. 判断哪些变量可能是类别编码，不能直接当连续变量
+5. 生成 data-audit.md 和初步变量字典
+6. 给出下一步清洗和构造建议
+```
+
+---
+
+### 阶段四：Stata 清洗、构造与分析
+
+正式 do-file 按下列结构组织：
+
+```
+dofiles/01_clean/      ← 原始数据清洗
+dofiles/02_construct/  ← 变量构造与样本筛选
+dofiles/03_analysis/   ← 描述统计、基准回归、稳健性
+dofiles/04_output/     ← 表格和图形组装
+```
+
+**基本分析 prompt：**
+
+```text
+请根据 data-audit.md 和 requirements spec 编写第一版 Stata 分析流程。
+
+要求：
+1. 新建或更新 dofiles/ 下的 do-file
+2. 使用中文注释
+3. 使用相对路径
+4. 每个可运行 do-file 打开并关闭日志
+5. 输出描述统计表、核心图形和基准回归表
+6. 图形同时导出 png 和 pdf
+7. 表格输出到 output/tables/
+8. 日志输出到 logs/
+9. 运行后检查 log，不要报告没有日志支撑的数字
+```
+
+**DID / Event Study 场景：**
+
+```text
+请帮我设计 DID / event study 分析。
+
+请先确认：
+1. 个体维度是什么
+2. 时间维度是什么
+3. treatment 如何定义
+4. 是否存在 staggered adoption
+5. 聚类标准误应放在哪一层
+6. pre-trend 和 placebo 如何做
+
+然后再写 Stata do-file，并输出事件研究表和图。
+```
+
+**IV 场景：**
+
+```text
+请帮我设计 IV 回归。
+
+请先写清楚：
+1. 内生变量
+2. 工具变量
+3. 排除限制的经济学理由
+4. 第一阶段应该如何报告
+5. 弱工具变量风险如何检查
+6. 表格如何分 panel 呈现
+
+确认后再写 Stata do-file。
+```
+
+---
+
+### 阶段五：日志验证与结果解释
+
+所有数值解释必须以 `logs/` 和 `output/tables/` 为唯一来源。
+
+**结果解释 prompt：**
+
+```text
+请根据最新 logs/ 和 output/tables/ 做 results-analysis。
+
+要求：
+1. 逐列还原每个回归规格
+2. 说明样本、控制变量、固定效应和聚类层级
+3. 只解释能在日志或表格中找到的数字
+4. 标出可能的识别威胁
+5. 给出 robustness、heterogeneity、mechanism 的下一步清单
+6. 生成 results_memos/ 下的结果解释 memo
+```
+
+**结果不稳定时的诊断 prompt：**
+
+```text
+当前结果不稳定。
+请使用 story-diagnostics 判断：
+1. 是理论故事不成立
+2. 是测量或变量构造问题
+3. 是样本或识别策略问题
+4. 还是当前数据不足
+
+请给出 STORY_READY、CREDIBLE_NULL、ITERATE_WITH_CURRENT_DATA 或 NEW_DATA_REQUIRED 的判断。
+```
+
+---
+
+### 阶段六：论文写作与 QA
+
+当表格和日志稳定后再进入写作。
+
+**写作 prompt：**
+
+```text
+请使用 paper-writing workflow。
+根据 output/tables/、output/figures/ 和 results_memos/，帮我起草 Main Results 小节。
+
+要求：
+1. 每个数值结论都引用对应表格或图形
+2. 不夸大机制解释
+3. 区分主效应、稳健性、异质性和机制
+4. 标出还不能写死的地方
+```
+
+**投稿前 QA prompt：**
+
+```text
+请使用 qa-paper workflow 对当前论文草稿做投稿前检查。
+
+重点检查：
+1. 研究问题是否清楚
+2. 识别策略是否自洽
+3. 正文数字是否和表格一致
+4. 图表标题和注释是否完整
+5. 数据与代码可复现说明是否足够
+6. 哪些问题会导致 hard gate failure
+```
+
+**R&R 回复 prompt：**
+
+```text
+请使用 review-response workflow。
+我会提供审稿意见和修改后的结果。
+
+请帮我生成：
+1. comment-to-change map
+2. response letter 初稿
+3. 每条回复对应的修改位置
+4. 还没有真正完成、不能承诺的地方
+```
+
+---
+
+## 仓库目录
+
+```
+./
+├── AGENTS.md                       ← Codex 主规则文件
+├── CLAUDE.md                       ← Claude Code 兼容说明
+├── MEMORY.md                       ← 仓库级记忆与上下文
+├── config.codex-econ.example.toml  ← Codex 配置示例
+│
+├── agents/                         ← 专用 Agent 定义（论文批评、数据审计、审稿回复等）
+│   ├── data-analyst/               ← 数据分析 Agent
+│   ├── paper-critic/               ← 论文评审 Agent
+│   ├── rebuttal-writer/            ← 审稿回复 Agent
+│   ├── theory-auditor/             ← 理论审计 Agent
+│   └── ...
+│
+├── skills/                         ← 可复用技能包（good-question、results-analysis 等）
+│
+├── templates/                      ← 模板文件
+│   ├── master-do-template.do        ← do-file 模板
+│   ├── did-analysis-template.do     ← DID 分析模板
+│   ├── ddml-analysis-template.do    ← DDML 分析模板
+│   ├── good-question-card.md        ← Good Question Card 模板
+│   ├── requirements-spec.md         ← Requirements Spec 模板
+│   ├── response-to-referees.md      ← 审稿回复模板
+│   ├── ...                          ← 更多模板
+│   └── private-study-skeleton/      ← 私有项目骨架模板
+│
+├── scripts/                        ← 运行、检查与项目创建脚本
+│   ├── new_private_study.ps1       ← 创建私有研究项目
+│   ├── run_pipeline.sh             ← 运行完整 Stata 流水线
+│   ├── run_stata.sh                ← 运行单个 do-file
+│   ├── check_data_safety.py        ← 数据安全检查
+│   └── quality_score.py            ← 质量评分
+│
+├── dofiles/                        ← 公开模板 Stata 流水线
+│   ├── 00_master.do                ← 主入口
+│   ├── 01_clean/                   ← 数据清洗
+│   ├── 02_construct/               ← 变量构造
+│   ├── 03_analysis/                ← 分析估计
+│   └── 04_output/                  ← 输出组装
+│
+├── quality_reports/                ← 质量报告模板与参考
+│   ├── good_questions/             ← Good Question Card 模板
+│   ├── specs/                      ← Requirements Spec 模板
+│   ├── decisions/                  ← 研究决策记录
+│   └── passports/                  ← 数值声明溯源护照
+│
+├── reports/                        ← Quarto 报告模板
+├── results_memos/                  ← 结果解释 memo 模板
+├── master_supporting_docs/         ← 支持文档与图像
+│
+├── data/                           ← 公开示例入口（真实数据不放这里）
+├── logs/                           ← 公开示例日志（真实日志不放这里）
+└── output/                         ← 公开示例输出
+```
+
+---
+
+## 常用命令
+
+### 项目创建
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/new_private_study.ps1 -Keyword "关键词" -InitGit
+```
+
+### Stata 执行
+
+```bash
+# 运行单个 do-file
+bash scripts/run_stata.sh dofiles/03_analysis/main_regression.do
+
+# 运行完整流水线
+bash scripts/run_pipeline.sh
+```
+
+### 报告渲染
+
+```bash
+quarto render reports/analysis_report.qmd
+```
+
+### 质量检查
+
+```bash
+# 数据安全检查
+python scripts/check_data_safety.py --staged $(git diff --cached --name-only)
+
+# 制品质量评分
+python scripts/quality_score.py dofiles/03_analysis/main_regression.do
+python scripts/quality_score.py reports/analysis_report.qmd
+```
+
+---
+
+## Stata 约定
+
+- do-file 顶部写明 `version`
+- 使用 `set more off`
+- 使用 `set varabbrev off`
+- 使用相对路径
+- 可运行 do-file 必须写日志
+- 随机过程设置统一 seed
+- 回归结果进入表格前使用 `estimates store` 或 `est store`
+- 图形同时导出 `.pdf` 和 `.png`
+- 表格优先输出 `.tex` 和 `.csv`
+- 新增或修改的 Stata 注释默认使用中文
+- 聚类标准误放在最有经济学和研究设计依据的层级，并在表注或 memo 中说明
+
+---
+
+## Workspace 内可用资源
+
+本仓库中，Codex 可以直接调用的组件分为三层：
+
+### 第一层：Skills（技能包）
+
+Skills 是面向具体任务的封装能力，Codex 会在对话中自动加载对应 Skill 的完整指令。核心 skill 包括：
+
+| Skill                     | 用途                   |
+| ------------------------- | ---------------------- |
+| `good-question`         | 生成和评测研究问题卡   |
+| `research-ideation`     | 研究构思与实证策略设计 |
+| `results-analysis`      | 基于日志和表格解读结果 |
+| `story-diagnostics`     | 结果不稳定时诊断原因   |
+| `paper-writing`         | 按模板起草论文章节     |
+| `paper-self-review`     | 论文自审与一致性检查   |
+| `qa-paper`              | 投稿前质量审计         |
+| `review-response`       | R&R 审稿回复           |
+| `qa-response`           | 审稿回复 QA            |
+| `citation-verification` | 文献引证核实           |
+| `post-acceptance`       | 录用后事项处理         |
+
+### 第二层：Agents（专用代理）
+
+Agents 是面向特定角色的代理，通过 `Task` 工具以子代理方式调用，适合需要独立上下文和重复迭代的任务：
+
+| Agent                   | 角色                     |
+| ----------------------- | ------------------------ |
+| `data-analyst`        | 数据清洗、审计与变量构造 |
+| `literature-reviewer` | 文献检索与差距分析       |
+| `theory-auditor`      | 理论框架与识别策略审计   |
+| `paper-miner`         | 论文写作模式挖掘         |
+| `paper-critic`        | 论文内部评审与压力测试   |
+| `paper-fixer`         | 针对批评意见修改论文     |
+| `rebuttal-writer`     | 撰写审稿意见回复         |
+| `response-critic`     | 审稿回复评审             |
+| `response-fixer`      | 针对回复意见修改         |
+| `artifact-verifier`   | 制品最终验证与门禁检查   |
+
+### 第三层：Templates（模板）
+
+`templates/` 目录提供开箱即用的骨架文件：
+
+- Stata do-file 模板（含标准头部、日志、段落组织）
+- Memo 模板（数据审计 memo、结果解释 memo）
+- 私有项目骨架（包含完整目录结构和 `AGENTS.project.md` 模板）
+
+---
+
+## 数据与隐私规则
+
+### 公开 workflow 仓库默认不提交
+
+```
+data/raw/**        data/derived/**        logs/**
+*.log              *.smcl                 *.gph
+*.dta              *.sav                  *.parquet
+*.csv              *.json                 *.xls
+*.xlsx
+```
+
+### 私有研究仓库注意事项
+
+- 排除密钥和 token
+- 排除个人账户配置
+- 排除临时缓存
+- 排除不允许上传 GitHub 的受限数据
+- 大型数据建议使用 Git LFS 或 DVC，并在 `data/README.md` 中记录重建方式
+
+---
+
+## 本地环境
+
+本仓库当前规则文件记录的本地环境：
+
+```
+Python: D:\ProgramFiles\anaconda3\python.exe
+Conda:  D:\ProgramFiles\anaconda3\Scripts\conda.exe
+Stata:  D:\Program Files\Stata18\StataMP-64.exe
+```
+
+如果你的机器路径不同，应在本地配置或项目说明中更新，但 do-file 仍应使用相对路径。
+
+---
+
+## 致谢
+
+本仓库最初来自面向经管专业 Stata 可复现研究的教学与实证工作流实践，并逐步整合了 Codex 优先、Claude Code 兼容、经济学论文 QA、Good Question 研究问题打磨和私有研究工作区管理。
+
+## 许可证
+
+MIT

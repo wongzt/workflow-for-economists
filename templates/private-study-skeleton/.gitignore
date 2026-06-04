@@ -1,0 +1,67 @@
+# Private research workspace ignore rules
+#
+# This template is designed for private GitHub repositories. It does not block
+# data, logs, tables, figures, or drafts by default because the purpose is to
+# preserve project-specific research assets privately.
+#
+# If your data license or IRB/ethics agreement forbids GitHub storage, add
+# project-specific ignore rules for data/raw/, data/derived/, or other folders.
+
+# Secrets
+.env
+.env.local
+*.key
+*.pem
+*.pfx
+*.p12
+
+# Local Codex / Claude state
+.codex/
+.claude/state/
+.claude/settings.local.json
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# Stata temporary files
+*.do.bak
+*.gph
+~$*.dta
+.stata_kernel_cache/
+
+# Office temporary files
+~$*.docx
+~$*.xlsx
+~$*.pptx
+
+# Quarto and LaTeX build artifacts
+/.quarto/
+reports/_freeze/
+reports/*_files/
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.nav
+*.out
+*.snm
+*.toc
+*.vrb
+*.synctex.gz
+*.run.xml
+*-blx.bib
+
+# OS and IDE
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.swp
+*.swo
+*~

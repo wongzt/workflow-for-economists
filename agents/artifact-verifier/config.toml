@@ -1,0 +1,2 @@
+# Agent: artifact-verifier
+sandbox_mode = "workspace-write"

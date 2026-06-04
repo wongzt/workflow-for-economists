@@ -1,0 +1,62 @@
+# Merge selected snippets into your real ~/.codex/config.toml.
+# This file is repository-local documentation only.
+#
+# Path notes: Replace the example paths below with your actual local paths.
+# All config_file paths should point to the agents/ directory inside this
+# repository. Use absolute paths for reliability; adjust for your machine.
+
+sandbox_mode = "workspace-write"
+
+[features]
+multi_agent = true
+memories = true
+skill_approval = true
+
+# --- Agent configurations ---
+# Replace <REPO_ROOT> with the path to this repository, e.g.:
+#   D:/Desktop/科研相关/workflow-for-economists
+
+[agents.literature-reviewer]
+description = "Empirical economics literature review with source mapping and version tracking"
+config_file = "<REPO_ROOT>/agents/literature-reviewer/config.toml"
+
+[agents.data-analyst]
+description = "Stata-first empirical analysis for sample construction, specifications, and table planning"
+config_file = "<REPO_ROOT>/agents/data-analyst/config.toml"
+
+[agents.theory-auditor]
+description = "Theory-facing auditor for interpreting empirical results and proposing disciplined next-step memos"
+config_file = "<REPO_ROOT>/agents/theory-auditor/config.toml"
+
+[agents.paper-miner]
+description = "Extract empirical economics writing patterns from papers and revision materials"
+config_file = "<REPO_ROOT>/agents/paper-miner/config.toml"
+
+[agents.paper-critic]
+description = "Read-only critic for empirical economics manuscripts"
+config_file = "<REPO_ROOT>/agents/paper-critic/config.toml"
+
+[agents.paper-fixer]
+description = "Conservative fixer for manuscript issues identified by paper-critic"
+config_file = "<REPO_ROOT>/agents/paper-fixer/config.toml"
+
+[agents.rebuttal-writer]
+description = "Economics journal revision-letter and referee-response specialist"
+config_file = "<REPO_ROOT>/agents/rebuttal-writer/config.toml"
+
+[agents.response-critic]
+description = "Read-only critic for economics response letters"
+config_file = "<REPO_ROOT>/agents/response-critic/config.toml"
+
+[agents.response-fixer]
+description = "Conservative fixer for issues identified by response-critic"
+config_file = "<REPO_ROOT>/agents/response-fixer/config.toml"
+
+[agents.artifact-verifier]
+description = "Final verifier for QA loops with hard gates, scores, and stop conditions"
+config_file = "<REPO_ROOT>/agents/artifact-verifier/config.toml"
+
+[mcp_servers.zotero]
+command = "zotero-mcp"
+args = ["serve"]
+enabled = false
