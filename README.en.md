@@ -63,7 +63,7 @@ Recommended structure: **one public workflow repository + one private repository
     └── results_memos/                   ← Result interpretation memos
 ```
 
-Real research projects use the naming pattern `YYYYMM + keyword`:
+Real research projects use the naming pattern `YYYYMM + keyword`, like:
 
 ```
 202606-digital-transformation-innovation
@@ -73,11 +73,13 @@ Real research projects use the naming pattern `YYYYMM + keyword`:
 
 ### What Goes into the Public Workflow Repository
 
-- Reusable Stata pipeline code (`dofiles/`)
+- Stata pipeline templates (`dofiles/`)
 - Agent and skill definitions (`agents/`, `skills/`)
 - Reusable templates (`templates/`)
 - Quality rules and check scripts (`scripts/`)
-- Workflow documentation free of sensitive information
+- Workflow documentation (`AGENTS.md`, `README.md`, etc.)
+
+> **Note:** The public repository does NOT contain `data/`, `logs/`, or `output/` directories. These are created and used only in private research workspaces.
 
 ### What Goes into Private Research Workspaces
 
@@ -118,22 +120,35 @@ powershell -ExecutionPolicy Bypass -File scripts/new_private_study.ps1 -Keyword 
 This creates:
 
 ```
-D:\Desktop\科研相关\202606-digital-transformation-innovation/
+~/research/202606-digital-transformation-innovation/
 ```
 
 ### Step 3: Start Codex inside the Private Workspace
 
+**Option A: Open the private project as workspace (recommended)**
+
 ```powershell
-cd "D:\Desktop\科研相关\202606-digital-transformation-innovation"
+cd "~/research/202606-digital-transformation-innovation"
 codex
 ```
 
-Example first prompt:
+**Option B: Use the research root directory as workspace**
+
+Open `~/research/` in VS Code. All sub-projects are visible in one window. Specify the current project in your messages:
+
+```text
+Current project: 202606-digital-transformation-innovation
+Please read workflow-for-economists/AGENTS.md.
+```
+
+> If you prefer the root-directory approach, consider placing a lightweight `AGENTS.md` at `~/research/AGENTS.md` as a workspace entry point for Codex.
+
+Example first prompt (when using a private project as workspace):
 
 ```text
 Please treat the current directory as a private empirical economics research project.
 The public workflow repository is at:
-D:\Desktop\科研相关\workflow-for-economists
+~/research/workflow-for-economists
 
 Please read this project's AGENTS.project.md and the workflow repository's AGENTS.md.
 My research direction is digital transformation and firm innovation.
@@ -395,52 +410,61 @@ Please generate:
 ├── MEMORY.md                       ← Repository-level memory and context
 ├── config.codex-econ.example.toml  ← Codex configuration example
 │
-├── agents/                         ← Specialized agent definitions (paper critic, data audit, rebuttal, etc.)
-│   ├── data-analyst/               ← Data analysis agent
-│   ├── paper-critic/               ← Paper review agent
-│   ├── rebuttal-writer/            ← Rebuttal writing agent
-│   ├── theory-auditor/             ← Theory audit agent
-│   └── ...
+├── agents/                         ← Specialized agent definitions
+│   ├── data-analyst/
+│   ├── literature-reviewer/
+│   ├── theory-auditor/
+│   ├── paper-miner/
+│   ├── paper-critic/
+│   ├── paper-fixer/
+│   ├── rebuttal-writer/
+│   ├── response-critic/
+│   ├── response-fixer/
+│   └── artifact-verifier/
 │
-├── skills/                         ← Reusable skill packages (good-question, results-analysis, etc.)
+├── skills/                         ← Reusable skill packages
+│   ├── good-question/
+│   ├── research-ideation/
+│   ├── results-analysis/
+│   ├── story-diagnostics/
+│   ├── paper-writing/
+│   ├── paper-self-review/
+│   ├── qa-paper/
+│   ├── review-response/
+│   ├── qa-response/
+│   ├── citation-verification/
+│   └── post-acceptance/
 │
 ├── templates/                      ← Template files
-│   ├── master-do-template.do        ← Do-file template
-│   ├── did-analysis-template.do     ← DID analysis template
-│   ├── ddml-analysis-template.do    ← DDML analysis template
-│   ├── good-question-card.md        ← Good Question Card template
-│   ├── requirements-spec.md         ← Requirements Spec template
-│   ├── response-to-referees.md      ← Referee response template
-│   ├── ...                          ← More templates
-│   └── private-study-skeleton/      ← Private project skeleton template
+│   ├── master-do-template.do
+│   ├── did-analysis-template.do
+│   ├── ddml-analysis-template.do
+│   ├── good-question-card.md
+│   ├── requirements-spec.md
+│   ├── response-to-referees.md
+│   ├── ...
+│   └── private-study-skeleton/
 │
 ├── scripts/                        ← Execution, check, and project creation scripts
-│   ├── new_private_study.ps1       ← Create a private research project
-│   ├── run_pipeline.sh             ← Run the full Stata pipeline
-│   ├── run_stata.sh                ← Run a single do-file
-│   ├── check_data_safety.py        ← Data safety check
-│   └── quality_score.py            ← Quality scoring
+│   ├── new_private_study.ps1
+│   ├── run_pipeline.sh
+│   ├── run_stata.sh
+│   ├── check_data_safety.py
+│   └── quality_score.py
 │
-├── dofiles/                        ← Public template Stata pipeline
+├── dofiles/                        ← Stata pipeline templates
 │   ├── 00_master.do                ← Main entry point
-│   ├── 01_clean/                   ← Data cleaning
-│   ├── 02_construct/               ← Variable construction
-│   ├── 03_analysis/                ← Analysis and estimation
-│   └── 04_output/                  ← Output assembly
+│   └── README.md
 │
 ├── quality_reports/                ← Quality report templates and references
-│   ├── good_questions/             ← Good Question Card templates
-│   ├── specs/                      ← Requirements spec templates
-│   ├── decisions/                  ← Research decision records
-│   └── passports/                  ← Numerical claim traceability passports
+│   ├── good_questions/
+│   ├── specs/
+│   ├── decisions/
+│   └── passports/
 │
 ├── reports/                        ← Quarto report templates
 ├── results_memos/                  ← Result interpretation memo templates
-├── master_supporting_docs/         ← Supporting documents and images
-│
-├── data/                           ← Public demo entry point (real data should not live here)
-├── logs/                           ← Public demo logs (real logs should not live here)
-└── output/                         ← Public demo outputs
+└── master_supporting_docs/         ← Supporting documents and images
 ```
 
 ---
@@ -500,50 +524,68 @@ python scripts/quality_score.py reports/analysis_report.qmd
 
 ## Available Workspace Resources
 
-Components that Codex can directly invoke within this repository are organized into three layers:
+The Codex components in this repository are organized around the complete lifecycle of an empirical economics research project, divided into Skills and Agents, each covering different stages.
 
-### Layer 1: Skills
+### Workflow Overview
 
-Skills are task-specific, encapsulated capabilities. Codex automatically loads the full instructions of a skill during a conversation. Core skills include:
+```
+Ideation ──→ Data Analysis ──→ Interpretation ──→ Writing ──→ QA ──→ R&R ──→ Post-Acceptance
+    │              │                │                │           │        │           │
+    ▼              ▼                ▼                ▼           ▼        ▼           ▼
+ ideation    data-analyst    results-analysis   paper-      qa-paper  review-    post-
+ good-       (agent)         story-             writing     qa-       response   acceptance
+ question                    diagnostics        paper-      response  rebuttal-
+ lit-                                           self-review            writer
+ reviewer                                                             response-
+ (agent)                                                              critic/fixer
+                                                                      artifact-
+                                                                      verifier
+                                              citation-verification (cross-cutting)
+```
 
-| Skill                     | Purpose                                         |
-| ------------------------- | ----------------------------------------------- |
-| `good-question`         | Generate and evaluate research question cards   |
-| `research-ideation`     | Research ideation and empirical strategy design |
-| `results-analysis`      | Interpret results based on logs and tables      |
-| `story-diagnostics`     | Diagnose causes of unstable results             |
-| `paper-writing`         | Draft paper sections from templates             |
-| `paper-self-review`     | Self-review and consistency check               |
-| `qa-paper`              | Pre-submission quality audit                    |
-| `review-response`       | R&R referee response                            |
-| `qa-response`           | Response letter QA                              |
-| `citation-verification` | Citation and reference verification             |
-| `post-acceptance`       | Post-acceptance tasks                           |
+### Skills
 
-### Layer 2: Agents
+Skills are organized by workflow stage. Codex automatically loads the appropriate skill during conversations:
 
-Agents are role-specific proxies invoked as sub-agents via the `Task` tool, ideal for tasks requiring independent context and repeated iterations:
+| Stage                     | Skill                     | Description                                                                                                                                                                                                                         |
+| ------------------------- | ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Ideation**        | `research-ideation`     | Problem framing → literature map → identification strategy → data feasibility. Produces `literature-review.md` and `identification-map.md` before any code is written                                                        |
+|                           | `good-question`         | Transforms vague ideas into falsifiable scientific questions. Generates Good Question Cards evaluating importance, rival explanations, falsifiability, and two-week pilots                                                          |
+| **Data Analysis**   | `results-analysis`      | Complete Stata-first analysis: raw data audit → cleaning → sample construction → variable definition → main regression → robustness → heterogeneity/mechanisms → theory audit → output → replication check                 |
+|                           | `story-diagnostics`     | Diagnoses when empirical results are unstable or don't support the expected story. Returns STORY_READY / CREDIBLE_NULL / ITERATE / NEW_DATA_REQUIRED                                                                                |
+| **Writing**         | `paper-writing`         | Drafts standard empirical economics paper structure: Introduction → Institutional Background → Data → Empirical Strategy → Main Results → Mechanisms/Heterogeneity. Every numerical claim tied to a specific table or figure   |
+|                           | `paper-self-review`     | Pre-submission or pre-advisor quality gate. Checks: question-design alignment, sample traceability, variable definition consistency, fixed effects and clustering choices                                                           |
+| **QA**              | `qa-paper`              | Rigorous paper QA cycle: critic → fixer → verifier. Checks identification credibility, table-number consistency, citation fidelity, and replication readiness. Used for pre-submission go/no-go decisions                         |
+|                           | `qa-response`           | Response letter QA cycle. Checks comment coverage, change traceability, and tone. Ensures every reviewer comment has a corresponding response                                                                                       |
+| **R&R**             | `review-response`       | Complete R&R workflow: classify referee comments (identification, robustness, mechanisms, external validity, literature positioning), draft response letter, map each comment to manuscript changes or reasoned non-changes         |
+| **Post-Acceptance** | `post-acceptance`       | Post-acceptance tasks: replication package cleanup, appendix finalization, data/code availability statements, journal-format figure checklists, seminar slides, policy briefs                                                       |
+| **Cross-Cutting**   | `citation-verification` | Citation verification: distinguishes working papers from published versions, checks journal metadata and DOIs, prevents fabricated citations. Source priority: publisher page > top journal site > NBER/RePEc/SSRN > Google Scholar |
 
-| Agent                   | Role                                                       |
-| ----------------------- | ---------------------------------------------------------- |
-| `data-analyst`        | Data cleaning, auditing, and variable construction         |
-| `literature-reviewer` | Literature search and gap analysis                         |
-| `theory-auditor`      | Audit theoretical frameworks and identification strategies |
-| `paper-miner`         | Extract writing patterns from papers                       |
-| `paper-critic`        | Internal paper review and stress testing                   |
-| `paper-fixer`         | Revise papers based on critical feedback                   |
-| `rebuttal-writer`     | Draft referee response letters                             |
-| `response-critic`     | Review response letters                                    |
-| `response-fixer`      | Fix issues identified in response reviews                  |
-| `artifact-verifier`   | Final artifact verification and gate checks                |
+### Agents
 
-### Layer 3: Templates
+Agents are organized by role, invoked as sub-agents via the `Task` tool, ideal for tasks requiring independent context and repeated iterations:
+
+| Stage                    | Agent                   | Role & Responsibilities                                                                                                                                                                                                                                                                              |
+| ------------------------ | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Ideation**       | `literature-reviewer` | Literature review specialist. Groups papers by research question, identification strategy, data source, and findings. Identifies disagreements, credibility gaps, and open empirical opportunities. Uses Zotero as default citation backbone                                                         |
+| **Data Analysis**  | `data-analyst`        | Stata-first empirical analysis expert. Translates identification designs into executable analysis plans, builds regression specification matrices, robustness plans, and table frameworks. Triggers or recommends `theory-auditor`                                                                 |
+| **Interpretation** | `theory-auditor`      | Theory-facing interpretation auditor. Tests whether current interpretations are consistent with economic theory and whether rival mechanisms remain alive. Produces structured memo: result summary → theory fit → rival mechanisms → interpretation risks → next empirical steps                |
+| **Writing**        | `paper-miner`         | Writing pattern miner. Extracts reusable patterns from published papers and review materials (introduction frameworks, institutional context descriptions, data descriptions, empirical strategy language), updating reference files used by writing skills                                          |
+| **QA**             | `paper-critic`        | Read-only critic performing adversarial paper review. Review dimensions: argument structure, identification credibility, econometric specification, literature positioning, writing/presentation norms, replication readiness. Assumes manuscript is below submission standard until hard gates pass |
+|                          | `paper-fixer`         | Executor that fixes issues identified by `paper-critic` in CRITICAL → MAJOR → MINOR order without expanding scope                                                                                                                                                                                |
+|                          | `artifact-verifier`   | Final verifier. Checks hard gates, scores against rubric, declares APPROVED or CONTINUE. Approves only when hard gates pass and score ≥ 90                                                                                                                                                          |
+| **R&R**            | `rebuttal-writer`     | Journal revision specialist. Classifies referee comments, selects appropriate response stance, drafts professional response letters, maintains comment-change-response traceability                                                                                                                  |
+|                          | `response-critic`     | Read-only critic for adversarial review of response letters. Checks comment coverage, stance quality, change traceability, evidence sufficiency, and tone                                                                                                                                            |
+|                          | `response-fixer`      | Executor that fixes issues identified by `response-critic` in CRITICAL → MAJOR → MINOR order while preserving traceability                                                                                                                                                                       |
+
+### Templates
 
 The `templates/` directory provides ready-to-use skeleton files:
 
-- Stata do-file templates (standard header, log setup, section organization)
-- Memo templates (data audit memo, result interpretation memo)
-- Private project skeleton (complete directory structure and `AGENTS.project.md` template)
+- **Stata do-file templates**: `master-do-template.do` (standard header, logging, stage organization), `did-analysis-template.do` (TWFE DID / Callaway-Sant'Anna), `ddml-analysis-template.do` (DDML double machine learning)
+- **Memo templates**: `good-question-card.md`, `requirements-spec.md`, `decision-record.md`, `session-log.md`, `passport-template.yaml`
+- **Paper templates**: `response-to-referees.md` (review response), `preregistration-template.md`
+- **Private project skeleton**: `private-study-skeleton/` (complete directory structure and `AGENTS.project.md` template)
 
 ---
 
@@ -585,7 +627,13 @@ If your machine uses different paths, update local configuration or project note
 
 ## Acknowledgments
 
-This repository began as a reproducible Stata workflow for economics and management education and empirical research. It has progressively integrated Codex-first operation, Claude Code compatibility, economics paper QA, Good Question research-question sharpening, and private research workspace management.
+This workflow draws on the following excellent projects:
+
+- [pedrohcgs/claude-code-my-workflow](https://github.com/pedrohcgs/claude-code-my-workflow) — Claude Code workflow management and project organization paradigms
+- [maxwell2732/codex-stata-for-economists](https://github.com/maxwell2732/codex-stata-for-economists) — Reproducible Stata research workflow for economics and management with Codex
+- [Rimagination/good-question](https://github.com/Rimagination/good-question) — Good Question Card methodology for research question sharpening
+
+It has progressively integrated Codex-first operation, Claude Code compatibility, economics paper QA, research question sharpening, and private research workspace management.
 
 ---
 

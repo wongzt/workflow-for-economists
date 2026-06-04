@@ -63,7 +63,7 @@
     └── results_memos/                   ← 结果解释 memo
 ```
 
-真实研究项目按 **年月 + 关键词** 命名：
+真实研究项目按 **年月 + 关键词** 命名，例如：
 
 ```
 202606数字化转型与企业创新
@@ -73,11 +73,13 @@
 
 ### 公开 workflow 仓库保存
 
-- 通用 Stata 流水线（`dofiles/`）
+- Stata 流水线模板（`dofiles/`）
 - Agent 和 Skill 定义（`agents/`、`skills/`）
 - 可复用模板（`templates/`）
 - 质量规则和检查脚本（`scripts/`）
-- 不含敏感信息的工作流文档
+- 工作流文档（`AGENTS.md`、`README.md` 等）
+
+> **注意：** 公开仓库不存放 `data/`、`logs/`、`output/` 目录。这些目录仅在私有研究工作区中创建和使用。
 
 ### 私有研究工作区保存
 
@@ -118,22 +120,35 @@ powershell -ExecutionPolicy Bypass -File scripts/new_private_study.ps1 -Keyword 
 这会创建：
 
 ```
-D:\Desktop\科研相关\202606数字化转型与企业创新/
+~/research/202606数字化转型与企业创新/
 ```
 
 ### 第三步：在私有工作区启动 Codex
 
+**方式一：以私有项目为工作区（推荐）**
+
 ```powershell
-cd "D:\Desktop\科研相关\202606数字化转型与企业创新"
+cd "~/research/202606数字化转型与企业创新"
 codex
 ```
 
-第一条 prompt 示例：
+**方式二：以科研根目录为工作区**
+
+在 VS Code 中打开 `~/research/`，所有子项目在同一窗口中可见。需要在对话中明确当前项目：
+
+```text
+当前项目：202606数字化转型与企业创新
+请读取 workflow-for-economists/AGENTS.md。
+```
+
+> 如果你习惯根目录方式，建议在 `~/research/AGENTS.md` 中写入工作区总入口信息，供 Codex 启动时自动读取。
+
+第一条 prompt 示例（私有项目为工作区时）：
 
 ```text
 请把当前目录当成一个私有经济学实证研究项目。
 公开 workflow 仓库在：
-D:\Desktop\科研相关\workflow-for-economists
+~/research/workflow-for-economists
 
 请先阅读本项目的 AGENTS.project.md，以及 workflow 仓库中的 AGENTS.md。
 我的研究方向是：数字化转型与企业创新。
@@ -395,52 +410,61 @@ dofiles/04_output/     ← 表格和图形组装
 ├── MEMORY.md                       ← 仓库级记忆与上下文
 ├── config.codex-econ.example.toml  ← Codex 配置示例
 │
-├── agents/                         ← 专用 Agent 定义（论文批评、数据审计、审稿回复等）
-│   ├── data-analyst/               ← 数据分析 Agent
-│   ├── paper-critic/               ← 论文评审 Agent
-│   ├── rebuttal-writer/            ← 审稿回复 Agent
-│   ├── theory-auditor/             ← 理论审计 Agent
-│   └── ...
+├── agents/                         ← 专用 Agent 定义
+│   ├── data-analyst/
+│   ├── literature-reviewer/
+│   ├── theory-auditor/
+│   ├── paper-miner/
+│   ├── paper-critic/
+│   ├── paper-fixer/
+│   ├── rebuttal-writer/
+│   ├── response-critic/
+│   ├── response-fixer/
+│   └── artifact-verifier/
 │
-├── skills/                         ← 可复用技能包（good-question、results-analysis 等）
+├── skills/                         ← 可复用技能包
+│   ├── good-question/
+│   ├── research-ideation/
+│   ├── results-analysis/
+│   ├── story-diagnostics/
+│   ├── paper-writing/
+│   ├── paper-self-review/
+│   ├── qa-paper/
+│   ├── review-response/
+│   ├── qa-response/
+│   ├── citation-verification/
+│   └── post-acceptance/
 │
 ├── templates/                      ← 模板文件
-│   ├── master-do-template.do        ← do-file 模板
-│   ├── did-analysis-template.do     ← DID 分析模板
-│   ├── ddml-analysis-template.do    ← DDML 分析模板
-│   ├── good-question-card.md        ← Good Question Card 模板
-│   ├── requirements-spec.md         ← Requirements Spec 模板
-│   ├── response-to-referees.md      ← 审稿回复模板
-│   ├── ...                          ← 更多模板
-│   └── private-study-skeleton/      ← 私有项目骨架模板
+│   ├── master-do-template.do
+│   ├── did-analysis-template.do
+│   ├── ddml-analysis-template.do
+│   ├── good-question-card.md
+│   ├── requirements-spec.md
+│   ├── response-to-referees.md
+│   ├── ...
+│   └── private-study-skeleton/
 │
 ├── scripts/                        ← 运行、检查与项目创建脚本
-│   ├── new_private_study.ps1       ← 创建私有研究项目
-│   ├── run_pipeline.sh             ← 运行完整 Stata 流水线
-│   ├── run_stata.sh                ← 运行单个 do-file
-│   ├── check_data_safety.py        ← 数据安全检查
-│   └── quality_score.py            ← 质量评分
+│   ├── new_private_study.ps1
+│   ├── run_pipeline.sh
+│   ├── run_stata.sh
+│   ├── check_data_safety.py
+│   └── quality_score.py
 │
-├── dofiles/                        ← 公开模板 Stata 流水线
+├── dofiles/                        ← Stata 流水线模板
 │   ├── 00_master.do                ← 主入口
-│   ├── 01_clean/                   ← 数据清洗
-│   ├── 02_construct/               ← 变量构造
-│   ├── 03_analysis/                ← 分析估计
-│   └── 04_output/                  ← 输出组装
+│   └── README.md
 │
 ├── quality_reports/                ← 质量报告模板与参考
-│   ├── good_questions/             ← Good Question Card 模板
-│   ├── specs/                      ← Requirements Spec 模板
-│   ├── decisions/                  ← 研究决策记录
-│   └── passports/                  ← 数值声明溯源护照
+│   ├── good_questions/
+│   ├── specs/
+│   ├── decisions/
+│   └── passports/
 │
 ├── reports/                        ← Quarto 报告模板
 ├── results_memos/                  ← 结果解释 memo 模板
-├── master_supporting_docs/         ← 支持文档与图像
-│
-├── data/                           ← 公开示例入口（真实数据不放这里）
-├── logs/                           ← 公开示例日志（真实日志不放这里）
-└── output/                         ← 公开示例输出
+└── master_supporting_docs/         ← 支持文档与图像
 ```
 
 ---
@@ -500,50 +524,68 @@ python scripts/quality_score.py reports/analysis_report.qmd
 
 ## Workspace 内可用资源
 
-本仓库中，Codex 可以直接调用的组件分为三层：
+本仓库的 Codex 组件按经济学实证研究的完整流程组织，分为 Skills 和 Agents 两层，各自覆盖研究生命周期的不同阶段。
 
-### 第一层：Skills（技能包）
+### 流程全景
 
-Skills 是面向具体任务的封装能力，Codex 会在对话中自动加载对应 Skill 的完整指令。核心 skill 包括：
+```
+研究构思 ──→ 数据分析 ──→ 结果解释 ──→ 论文写作 ──→ QA评审 ──→ 审稿回复 ──→ 录用后续
+    │            │            │            │           │           │            │
+    ▼            ▼            ▼            ▼           ▼           ▼            ▼
+ ideation    data-analyst  results      paper-      qa-paper   review-     post-
+ good-       (agent)       analysis     writing     qa-        response    acceptance
+ question                  story-       paper-      response   rebuttal-
+ lit-                      diagnostics  self-                  writer
+ reviewer                               review                 response-
+ (agent)                                                       critic/fixer
+                                                               artifact-
+                                                               verifier
+                                              citation-verification (贯穿全程)
+```
 
-| Skill                     | 用途                   |
-| ------------------------- | ---------------------- |
-| `good-question`         | 生成和评测研究问题卡   |
-| `research-ideation`     | 研究构思与实证策略设计 |
-| `results-analysis`      | 基于日志和表格解读结果 |
-| `story-diagnostics`     | 结果不稳定时诊断原因   |
-| `paper-writing`         | 按模板起草论文章节     |
-| `paper-self-review`     | 论文自审与一致性检查   |
-| `qa-paper`              | 投稿前质量审计         |
-| `review-response`       | R&R 审稿回复           |
-| `qa-response`           | 审稿回复 QA            |
-| `citation-verification` | 文献引证核实           |
-| `post-acceptance`       | 录用后事项处理         |
+### Skills（技能包）
 
-### 第二层：Agents（专用代理）
+Skills 按研究流程阶段组织，Codex 会在对话中根据任务自动加载对应 Skill：
 
-Agents 是面向特定角色的代理，通过 `Task` 工具以子代理方式调用，适合需要独立上下文和重复迭代的任务：
+| 阶段               | Skill                     | 详细说明                                                                                                                                                    |
+| ------------------ | ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **研究构思** | `research-ideation`     | 问题框架 → 文献地图 → 识别策略 → 数据可行性。产出 `literature-review.md` 和 `identification-map.md`，在写代码之前先建立研究设计的全局视图            |
+|                    | `good-question`         | 将模糊想法转化为可证伪的科学问题。生成 Good Question Card，检查重要性、竞争性解释、可证伪性和两周 pilot，区分"值得做"和"能做"的问题                         |
+| **数据分析** | `results-analysis`      | Stata 优先的完整分析流程：原始数据审计 → 清洗合并 → 样本构造 → 变量定义 → 主回归 → 稳健性 → 异质性/机制 → 理论审计 → 图表输出 → 复现检查           |
+|                    | `story-diagnostics`     | 当实证结果不稳定或不支持预期故事时使用。诊断是理论问题、测量问题、样本问题还是数据不足，给出 STORY_READY / CREDIBLE_NULL / ITERATE / NEW_DATA_REQUIRED 判断 |
+| **论文写作** | `paper-writing`         | 按经济学实证论文标准结构起草：引言 → 制度背景 → 数据 → 实证策略 → 主要结果 → 机制/异质性。确保每个数值结论对应具体表格或图形                           |
+|                    | `paper-self-review`     | 投稿前或导师审阅前的自检门禁。检查研究问题与识别策略匹配、样本选择可追溯、变量定义一致性、固定效应和聚类标准误选择的合理性                                  |
+| **QA 评审**  | `qa-paper`              | 严格的论文 QA 循环：critic → fixer → verifier。检查识别可信度、表格数字一致性、引用保真度和复现准备。适用于投稿前 go/no-go 决策                           |
+|                    | `qa-response`           | 审稿回复信的 QA 循环。检查评论覆盖率、修改可追溯性、语气规范性，确保每条审稿意见都有对应处理                                                                |
+| **审稿回复** | `review-response`       | 完整 R&R 流程：解析审稿意见并分类（识别、稳健性、机制、外部有效性、文献定位等），起草回复信，映射每条意见到论文修改或合理的不修改理由                       |
+| **录用后续** | `post-acceptance`       | 论文接受后的收尾工作：复现包清理、附录定稿、数据与代码可用性声明、期刊级图表清单、研讨会幻灯片、政策简报                                                    |
+| **贯穿全程** | `citation-verification` | 引文核实：区分工作论文与已发表版本、检查期刊元数据和 DOI、防止虚构引用。信源优先级：出版社页面 > 顶级期刊网站 > NBER/RePEc/SSRN > Google Scholar            |
 
-| Agent                   | 角色                     |
-| ----------------------- | ------------------------ |
-| `data-analyst`        | 数据清洗、审计与变量构造 |
-| `literature-reviewer` | 文献检索与差距分析       |
-| `theory-auditor`      | 理论框架与识别策略审计   |
-| `paper-miner`         | 论文写作模式挖掘         |
-| `paper-critic`        | 论文内部评审与压力测试   |
-| `paper-fixer`         | 针对批评意见修改论文     |
-| `rebuttal-writer`     | 撰写审稿意见回复         |
-| `response-critic`     | 审稿回复评审             |
-| `response-fixer`      | 针对回复意见修改         |
-| `artifact-verifier`   | 制品最终验证与门禁检查   |
+### Agents（专用代理）
 
-### 第三层：Templates（模板）
+Agents 按角色组织，通过 `Task` 工具以子代理方式调用，适合需要独立上下文和重复迭代的任务：
+
+| 阶段               | Agent                   | 角色与职责                                                                                                                                                    |
+| ------------------ | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **研究构思** | `literature-reviewer` | 文献综述专家。按研究问题、识别策略、数据来源和主要发现对论文分组，识别分歧、可信度差距和开放实证机会。默认使用 Zotero 作为引文骨架                            |
+| **数据分析** | `data-analyst`        | Stata 优先的实证分析专家。将实证设计转化为可执行分析计划，构建回归规格矩阵、稳健性计划和表格框架。触发或推荐 `theory-auditor`                               |
+| **结果解释** | `theory-auditor`      | 理论面向的解读审计者。测试当前解读是否符合经济学理论，竞争性机制是否仍然存活。产出结构化 memo：结果摘要 → 理论拟合 → 竞争机制 → 解读风险 → 下一步实证动作 |
+| **论文写作** | `paper-miner`         | 写作模式挖掘者。从已发表论文和审稿材料中提取可复用模式（引言框架、制度背景、数据描述、实证策略写法），更新写作技能使用的参考文件                              |
+| **QA 评审**  | `paper-critic`        | 只读批评者，对论文进行对抗性评审。审查维度：论证结构、识别可信度、计量规格、文献定位、写作规范、复现准备。未通过硬门禁前假设手稿未达到提交标准                |
+|                    | `paper-fixer`         | 执行者，按 CRITICAL → MAJOR → MINOR 顺序修复 `paper-critic` 发现的问题，不扩大修改范围                                                                    |
+|                    | `artifact-verifier`   | 最终验证者，检查硬门禁，按评分标准打分，宣布 APPROVED 或 CONTINUE。仅在硬门禁通过且分数 ≥ 90 时批准                                                          |
+| **审稿回复** | `rebuttal-writer`     | 期刊修改专家。解析审稿意见并分类，选择合适回复立场，起草专业回复信，维护评论-修改-回复的可追溯性                                                              |
+|                    | `response-critic`     | 只读批评者，对回复信进行对抗性评审。检查评论覆盖率、立场质量、修改可追溯性、证据充分性和语气规范                                                              |
+|                    | `response-fixer`      | 执行者，按 CRITICAL → MAJOR → MINOR 顺序修复 `response-critic` 发现的问题，保持可追溯性                                                                   |
+
+### Templates（模板）
 
 `templates/` 目录提供开箱即用的骨架文件：
 
-- Stata do-file 模板（含标准头部、日志、段落组织）
-- Memo 模板（数据审计 memo、结果解释 memo）
-- 私有项目骨架（包含完整目录结构和 `AGENTS.project.md` 模板）
+- **Stata do-file 模板**：`master-do-template.do`（含标准头部、日志、阶段组织）、`did-analysis-template.do`（TWFE DID / Callaway-Sant'Anna）、`ddml-analysis-template.do`（DDML 双重机器学习）
+- **Memo 模板**：`good-question-card.md`、`requirements-spec.md`、`decision-record.md`、`session-log.md`、`passport-template.yaml`
+- **论文模板**：`response-to-referees.md`（审稿回复）、`preregistration-template.md`
+- **私有项目骨架**：`private-study-skeleton/`（包含完整目录结构和 `AGENTS.project.md` 模板）
 
 ---
 
@@ -585,7 +627,15 @@ Stata:  D:\Program Files\Stata18\StataMP-64.exe
 
 ## 致谢
 
-本仓库最初来自面向经管专业 Stata 可复现研究的教学与实证工作流实践，并逐步整合了 Codex 优先、Claude Code 兼容、经济学论文 QA、Good Question 研究问题打磨和私有研究工作区管理。
+本仓库的流程搭建参考了以下优秀项目：
+
+- [pedrohcgs/claude-code-my-workflow](https://github.com/pedrohcgs/claude-code-my-workflow) — Claude Code 工作流管理与项目组织范式
+- [maxwell2732/codex-stata-for-economists](https://github.com/maxwell2732/codex-stata-for-economists) — 面向经管专业的 Stata 可复现研究 Codex 工作流
+- [Rimagination/good-question](https://github.com/Rimagination/good-question) — Good Question Card 研究问题打磨方法论
+
+并逐步整合了 Codex 优先、Claude Code 兼容、经济学论文 QA、研究问题打磨和私有研究工作区管理等实践。
+
+---
 
 ## 许可证
 
