@@ -2,14 +2,18 @@ param(
     [Parameter(Mandatory = $true)]
     [string]$Keyword,
 
-    [string]$BaseDir = "D:\Desktop\科研相关",
+    [string]$BaseDir = "..",
 
-    [string]$WorkflowRepo = "D:\Desktop\科研相关\workflow-for-economists",
+    [string]$WorkflowRepo = ".",
 
     [switch]$InitGit
 )
 
 $ErrorActionPreference = "Stop"
+
+# Resolve relative paths to absolute, handling possible trailing backslash
+$BaseDir = (Resolve-Path $BaseDir).Path.TrimEnd('\')
+$WorkflowRepo = (Resolve-Path $WorkflowRepo).Path.TrimEnd('\')
 
 $stamp = Get-Date -Format "yyyyMM"
 $projectName = "$stamp$Keyword"
@@ -47,5 +51,5 @@ Write-Host "Created private research workspace:"
 Write-Host $target
 Write-Host ""
 Write-Host "Next step:"
-Write-Host "  cd `"$target`""
-Write-Host "  codex"
+Write-Host "  In VS Code: File -> Open Folder -> $target"
+Write-Host "  Start chatting in the Codex plugin panel."

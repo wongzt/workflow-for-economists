@@ -1,4 +1,4 @@
-# Workflow for Economists
+# Workflow for Economists (Dev)
 
 **A Codex Reproducible Workflow for Empirical Economics and Management Research**
 
@@ -132,6 +132,8 @@ This creates:
 ```
 
 ### Step 3: Start Codex inside the Private Workspace
+
+Use the VS Code Codex plugin. Switch workspaces by opening folders — no terminal commands needed.
 
 Use the VS Code Codex plugin. Switch workspaces by opening folders — no terminal commands needed.
 
