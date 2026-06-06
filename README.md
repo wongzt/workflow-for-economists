@@ -1,4 +1,4 @@
-# Codex Stata for Economists
+# Workflow for Economists
 
 **面向经管实证研究的 Codex 可复现工作流**
 
@@ -115,7 +115,7 @@ cd workflow-for-economists
 
 ### 第二步：创建私有研究工作区
 
-在 workflow 仓库根目录运行：
+在 workflow 仓库根目录（~/research）运行：
 
 ```powershell
 # 创建项目目录
@@ -133,25 +133,11 @@ powershell -ExecutionPolicy Bypass -File scripts/new_private_study.ps1 -Keyword 
 
 ### 第三步：在私有工作区启动 Codex
 
+在 VS Code 的 Codex 插件中，通过**打开文件夹**的方式切换工作区即可，无需终端命令。
+
 **方式一：以私有项目为工作区（推荐）**
 
-```powershell
-cd "~/research/202606数字化转型与企业创新"
-codex
-```
-
-**方式二：以科研根目录为工作区**
-
-在 VS Code 中打开 `~/research/`，所有子项目在同一窗口中可见。需要在对话中明确当前项目：
-
-```text
-当前项目：202606数字化转型与企业创新
-请读取 workflow-for-economists/AGENTS.md。
-```
-
-> 如果你习惯根目录方式，建议在 `~/research/AGENTS.md` 中写入工作区总入口信息，供 Codex 启动时自动读取。
-
-第一条 prompt 示例（私有项目为工作区时）：
+`文件 → 打开文件夹` → 选择 `202606数字化转型与企业创新/`。Codex 会自动绑定该目录，直接开始对话：
 
 ```text
 请把当前目录当成一个私有经济学实证研究项目。
@@ -160,12 +146,18 @@ codex
 
 请先阅读本项目的 AGENTS.project.md，以及 workflow 仓库中的 AGENTS.md。
 我的研究方向是：数字化转型与企业创新。
-我目前还不确定具体问题。
-
-请先用 good-question workflow 帮我生成 2-3 张 Good Question Card，
-比较每个问题的重要性、可行性、竞争性解释、可证伪性和两周 pilot。
-不要开始写 Stata 代码，先帮我判断哪个问题值得推进。
 ```
+
+**方式二：以科研根目录为工作区**
+
+`文件 → 打开文件夹` → 选择 `~/research/`，所有子项目在同一窗口中可见。在对话中明确当前项目即可：
+
+```text
+当前项目：202606数字化转型与企业创新
+请读取 workflow-for-economists/AGENTS.md。
+```
+
+> 如果习惯根目录方式，建议在 `~/research/AGENTS.md` 中写入工作区总入口信息，供 Codex 启动时自动读取。
 
 ---
 

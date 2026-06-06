@@ -14,7 +14,7 @@ skill_approval = true
 
 # --- Agent configurations ---
 # Replace <REPO_ROOT> with the path to this repository, e.g.:
-#   D:/Desktop/科研相关/workflow-for-economists
+#   D:/workflow-for-economists
 
 [agents.literature-reviewer]
 description = "Empirical economics literature review with source mapping and version tracking"
