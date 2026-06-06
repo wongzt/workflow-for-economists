@@ -613,15 +613,17 @@ data/raw/**        data/derived/**        logs/**
 
 ## Local Environment
 
-The current project guide records the following local environment:
+Configure the following paths according to your local setup:
 
 ```
-Python: D:\ProgramFiles\anaconda3\python.exe
-Conda:  D:\ProgramFiles\anaconda3\Scripts\conda.exe
-Stata:  D:\Program Files\Stata18\StataMP-64.exe
+Python: your-python-path
+Conda:  your-conda-path
+Stata:  your-stata-path
 ```
 
-If your machine uses different paths, update local configuration or project notes accordingly, but do-files should still use relative paths.
+See `config.codex-econ.example.toml` for configuration examples. Copy it to `config.codex-econ.toml` and adjust the paths.
+
+> Always use relative paths in do-files. Do not hardcode machine-specific paths in Stata code.
 
 ---
 

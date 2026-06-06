@@ -6,6 +6,14 @@
 
 ---
 
+## 版本说明
+
+本仓库是**稳定发布版**，所有功能均经过实际研究项目验证，可直接 clone 使用。
+
+开发工作在私有仓库进行，本仓库定期更新稳定版。如果你发现 bug 或有功能建议，欢迎通过 Issue 提交。
+
+---
+
 ## 定位
 
 本仓库是一个**公开 workflow 仓库**，保存可复用的研究流程、Stata 流水线、Codex 配置、agents、skills、模板和质量管理规则。
@@ -613,15 +621,17 @@ data/raw/**        data/derived/**        logs/**
 
 ## 本地环境
 
-本仓库当前规则文件记录的本地环境：
+请根据你的本地环境配置以下路径：
 
 ```
-Python: D:\ProgramFiles\anaconda3\python.exe
-Conda:  D:\ProgramFiles\anaconda3\Scripts\conda.exe
-Stata:  D:\Program Files\Stata18\StataMP-64.exe
+Python: 你的Python路径
+Conda:  你的Conda路径
+Stata:  你的Stata路径
 ```
 
-如果你的机器路径不同，应在本地配置或项目说明中更新，但 do-file 仍应使用相对路径。
+配置文件请参考 `config.codex-econ.example.toml`，复制为 `config.codex-econ.toml` 后修改。
+
+> do-file 代码中始终使用相对路径，不依赖特定机器路径。
 
 ---
 

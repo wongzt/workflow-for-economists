@@ -214,7 +214,7 @@ python scripts/check_data_safety.py --staged $(git diff --cached --name-only)
 
 ## Stata Conventions
 
-- Local Stata is Stata 18: `D:\Program Files\Stata18\StataMP-64.exe`.
+- Local Stata version: use `version 18` in do-files. Point `scripts/run_stata.sh` to your Stata executable.
 - Pin Stata do-files to `version 18` unless the user explicitly changes the project standard.
 - Pin the Stata version at the top of each `.do` file.
 - Use one project-wide seed unless a task has a documented reason to do otherwise.
@@ -236,12 +236,11 @@ python scripts/check_data_safety.py --staged $(git diff --cached --name-only)
 
 ## Local Environment
 
-- Python is Anaconda, not the Microsoft Store Python.
-- Miniconda root: `D:\ProgramFiles\anaconda3`.
-- Conda executable: `D:\ProgramFiles\anaconda3\Scripts\conda.exe`.
-- Python executable: `D:\ProgramFiles\anaconda3\python.exe`.
-- Stata executable: `D:\Program Files\Stata18\StataMP-64.exe`.
+- Python: Anaconda or Miniconda recommended. Verify that `python` is on your PATH.
+- Conda: Verify that `conda` is on your PATH.
+- Stata: Stata 18 MP recommended. Pin `version 18` in do-files.
 - Prefer explicit executable paths if `python`, `conda`, or `stata` are not found on `PATH`.
+- See `config.codex-econ.example.toml` for configuration examples.
 
 ## Log Verification
 
