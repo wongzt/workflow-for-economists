@@ -1,8 +1,16 @@
-# Codex Stata for Economists
+# Workflow for Economists (Dev)
 
 **面向经管实证研究的 Codex 可复现工作流**
 
 **最后更新：** 2026-06-04
+
+---
+
+## 仓库定位
+
+本仓库是**私有开发仓库**，用于日常迭代开发、测试新功能、保存个人配置。稳定版本会定期同步到公开发布仓库：[workflow-for-economists](https://github.com/wongzt/workflow-for-economists)。
+
+> 本仓库内容包含个人专属配置和未完成功能，请勿对外分享。
 
 ---
 

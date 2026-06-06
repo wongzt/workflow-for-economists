@@ -1,8 +1,16 @@
-# Workflow for Economists
+# Workflow for Economists (Dev)
 
 **A Codex Reproducible Workflow for Empirical Economics and Management Research**
 
 **Last Updated:** 2026-06-04
+
+---
+
+## Repository Positioning
+
+This is the **private development repository** for daily iteration, feature testing, and personal configuration. Stable versions are periodically synced to the public release repository: [workflow-for-economists](https://github.com/wongzt/workflow-for-economists).
+
+> This repository contains personal configurations and in-progress features. Do not share externally.
 
 ---
 
