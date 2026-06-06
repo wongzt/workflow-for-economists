@@ -1,4 +1,4 @@
-# Codex Stata for Economists
+# Workflow for Economists
 
 **A Codex Reproducible Workflow for Empirical Economics and Management Research**
 
