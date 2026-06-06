@@ -1,4 +1,4 @@
-# Workflow for Economists
+# Codex Stata for Economists
 
 **面向经管实证研究的 Codex 可复现工作流**
 
