@@ -133,25 +133,11 @@ This creates:
 
 ### Step 3: Start Codex inside the Private Workspace
 
+Use the VS Code Codex plugin. Switch workspaces by opening folders — no terminal commands needed.
+
 **Option A: Open the private project as workspace (recommended)**
 
-```powershell
-cd "~/research/202606-digital-transformation-innovation"
-codex
-```
-
-**Option B: Use the research root directory as workspace**
-
-Open `~/research/` in VS Code. All sub-projects are visible in one window. Specify the current project in your messages:
-
-```text
-Current project: 202606-digital-transformation-innovation
-Please read workflow-for-economists/AGENTS.md.
-```
-
-> If you prefer the root-directory approach, consider placing a lightweight `AGENTS.md` at `~/research/AGENTS.md` as a workspace entry point for Codex.
-
-Example first prompt (when using a private project as workspace):
+`File → Open Folder` → select `202606-digital-transformation-innovation/`. Codex binds to that directory automatically. Start chatting:
 
 ```text
 Please treat the current directory as a private empirical economics research project.
@@ -166,6 +152,17 @@ Please first use the good-question workflow to generate 2-3 Good Question Cards.
 Compare each question's importance, feasibility, rival explanations, falsifiability, and two-week pilot.
 Do not start writing Stata code yet. Help me decide which question is worth pursuing.
 ```
+
+**Option B: Use the research root directory as workspace**
+
+`File → Open Folder` → select `~/research/`. All sub-projects are visible in one window. Specify the current project in your messages:
+
+```text
+Current project: 202606-digital-transformation-innovation
+Please read workflow-for-economists/AGENTS.md.
+```
+
+> If you prefer the root-directory approach, consider placing a lightweight `AGENTS.md` at `~/research/AGENTS.md` as a workspace entry point for Codex.
 
 ---
 
