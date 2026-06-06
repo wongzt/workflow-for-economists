@@ -6,6 +6,14 @@
 
 ---
 
+## Version Notice
+
+This is the **stable release branch**. All features have been validated through real research projects and are ready to clone and use.
+
+Development takes place in a private repository. This repository receives stable updates periodically. If you find a bug or have a feature suggestion, please open an Issue.
+
+---
+
 ## Positioning
 
 This is a **public workflow repository** that stores reusable research processes, Stata pipelines, Codex configurations, agents, skills, templates, and quality management rules.
